@@ -28,17 +28,7 @@ class SignInViewController: UIViewController {
     }
     
     @IBAction func secureButtonPressed(_ sender: UIButton) {
-        if passwordTextField.isSecureTextEntry {
-            let image = UIImage(systemName: "eye.fill")
-            sender.setImage(image, for: .normal)
-            
-            passwordTextField.isSecureTextEntry = false
-        } else {
-            let image = UIImage(systemName: "eye.slash.fill")
-            sender.setImage(image, for: .normal)
-            
-            passwordTextField.isSecureTextEntry = true
-        }
+        passwordTextField.changeSecuryPassword(sender)
     }
     
     @IBAction func rememberBtnPressed(_ sender: UIButton) {
@@ -53,8 +43,10 @@ class SignInViewController: UIViewController {
     }
     
     @IBAction func singInPressed(_ sender: UIButton) {
-        let loginCheck = checkForEmptiness(textField: loginTextField)
-        let passCheck = checkForEmptiness(textField: passwordTextField)
+        let loginCheck = loginTextField.checkForEmptiness()
+        let passCheck = passwordTextField.checkForEmptiness()
+        
+        
         if loginCheck && passCheck {
             self.performSegue(withIdentifier: "succes", sender: self)
         }
@@ -63,45 +55,26 @@ class SignInViewController: UIViewController {
     @IBAction func forgotBtnPressed(_ sender: UIButton) {
         self.performSegue(withIdentifier: "forgetSegue", sender: self)
     }
-    
-    func checkForEmptiness(textField: UITextField) -> Bool{
-        if textField.text?.isEmpty == true {
-            
-            textField.placeholder = "Заполните, пожалуйста"
-            let color: UIColor = #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 0.5)
-            let colorLine: CGColor = #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
-            textField.placeholderColor(color: color)
-            textField.addBottomBorder(color: colorLine)
-            return false
-        } else {
-            let color: UIColor = #colorLiteral(red: 0.6470588446, green: 0.6470588446, blue: 0.6470588446, alpha: 0.4804852214)
-            let colorLine: CGColor = #colorLiteral(red: 0.8805750012, green: 0.8905246854, blue: 0.9118484855, alpha: 1)
-            textField.layer.borderColor = #colorLiteral(red: 0, green: 0.4470588235, blue: 0.8823529412, alpha: 0.04303413037)
-            textField.placeholder = "name"
-            textField.placeholderColor(color: color)
-            textField.addBottomBorder(color: colorLine)
-            return true
-        }
-    }
 }
 
 
 extension UITextField {
-    //for line bottom textField
-    func addBottomBorder(color: CGColor){
-            let bottomLine = CALayer()
-            bottomLine.frame = CGRect(x: 0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
-        bottomLine.backgroundColor = color
-            layer.addSublayer(bottomLine)
+    
+    func changeSecuryPassword(_ sender: UIButton) {
+        if self.isSecureTextEntry {
+            let image = UIImage(systemName: "eye.fill")
+            sender.setImage(image, for: .normal)
+            
+            self.isSecureTextEntry = false
+        } else {
+            let image = UIImage(systemName: "eye.slash.fill")
+            sender.setImage(image, for: .normal)
+            
+            self.isSecureTextEntry = true
+        }
     }
     
-    //for change color placeholder
-    func placeholderColor(color: UIColor) {
-        let placeholder = self.placeholder ?? "" //There should be a placeholder set in storyboard or elsewhere string or pass empty
-        self.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor : color])
-    }
-    //checkInEmpty
-    func checkForEmptiness() -> Bool{
+    func checkForEmptiness() -> Bool {
         if self.text?.isEmpty == true {
             
             self.placeholder = "Заполните, пожалуйста"
@@ -120,6 +93,19 @@ extension UITextField {
             return true
         }
     }
+    
+    //for line bottom textField
+    func addBottomBorder(color: CGColor){
+            let bottomLine = CALayer()
+            bottomLine.frame = CGRect(x: 0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
+        bottomLine.backgroundColor = color
+            layer.addSublayer(bottomLine)
+    }
+    
+    //for change color placeholder
+    func placeholderColor(color: UIColor) {
+        let placeholder = self.placeholder ?? "" //There should be a placeholder set in storyboard or elsewhere string or pass empty
+        self.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor : color])
+    }
 
 }
-

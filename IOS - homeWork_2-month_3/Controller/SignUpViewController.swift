@@ -36,10 +36,10 @@ class SignUpViewController: UIViewController {
     }
     
     @IBAction func securePassButton(_ sender: UIButton) {
-        safePassword(sender: sender, textField: passwordTextField)
+        passwordTextField.changeSecuryPassword(sender)
     }
     @IBAction func secureConfirmButton(_ sender: UIButton) {
-        safePassword(sender: sender, textField: confirmPassTextField)
+        confirmPassTextField.changeSecuryPassword(sender)
     }
     
     
@@ -70,52 +70,19 @@ class SignUpViewController: UIViewController {
         }
     }
     
-    func safePassword(sender: UIButton, textField: UITextField) {
-        if textField.isSecureTextEntry {
-            let image = UIImage(systemName: "eye.fill")
-            sender.setImage(image, for: .normal)
-            
-            textField.isSecureTextEntry = false
-        } else {
-            let image = UIImage(systemName: "eye.slash.fill")
-            sender.setImage(image, for: .normal)
-            
-            textField.isSecureTextEntry = true
-        }
-    }
-    
     func checkAllTextField() -> Bool {
-        let user = checkForEmptiness(textField: userNameTextField)
-        let email = checkForEmptiness(textField: emailTextField)
-        let number = checkForEmptiness(textField: numberTextField)
-        let name = checkForEmptiness(textField: fullNameTextField)
-        let pass = checkForEmptiness(textField: passwordTextField)
-        let conf = checkForEmptiness(textField: confirmPassTextField)
+        let user = userNameTextField.checkForEmptiness()
+        let email = emailTextField.checkForEmptiness()
+        let number = numberTextField.checkForEmptiness()
+        let name = fullNameTextField.checkForEmptiness()
+        let pass = passwordTextField.checkForEmptiness()
+        let conf = confirmPassTextField.checkForEmptiness()
         
         if user && email && number && name && pass && conf {
             return true
         }
         return false
     }
-    
-    func checkForEmptiness(textField: UITextField) -> Bool{
-        if textField.text?.isEmpty == true {
-            
-            textField.placeholder = "Заполните, пожалуйста"
-            let color: UIColor = #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 0.5)
-            let colorLine: CGColor = #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
-            textField.placeholderColor(color: color)
-            textField.addBottomBorder(color: colorLine)
-            return false
-        } else {
-            let color: UIColor = #colorLiteral(red: 0.6470588446, green: 0.6470588446, blue: 0.6470588446, alpha: 0.4804852214)
-            let colorLine: CGColor = #colorLiteral(red: 0.8805750012, green: 0.8905246854, blue: 0.9118484855, alpha: 1)
-            textField.layer.borderColor = #colorLiteral(red: 0, green: 0.4470588235, blue: 0.8823529412, alpha: 0.04303413037)
-            textField.placeholder = "name"
-            textField.placeholderColor(color: color)
-            textField.addBottomBorder(color: colorLine)
-            return true
-        }
-    }
 }
+
 
